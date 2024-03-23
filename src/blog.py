@@ -1,8 +1,11 @@
+from typing import List
+from .post import Post
+
 class Blog:
-    def __init__(self, title, author):
+    def __init__(self, title: str, author: str):
         self.title = title
         self.author = author
-        self.posts = []
+        self.posts: List[Post] = []
 
     def __repr__(self):
         return 'Blog :: {} by {} ({} post{})'.format(
@@ -12,7 +15,7 @@ class Blog:
             "s" if len(self.posts) != 1 else "")
 
     def create_post(self, title, content):
-        self.posts.append({'title': title, 'content': content})
+        self.posts.append(Post(title, content))
 
     def json(self):
         return {
