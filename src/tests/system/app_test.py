@@ -11,11 +11,35 @@ class AppTest(TestCase):
             app.menu()
             mocked_input.assert_called_with(app.MENU_PROMPT)
 
+    def test_menu_calls_create_blog(self):
+        with patch('builtins.input') as mocked_input:
+            mocked_input.side_effect = ('c', 'TestCreateBlog', 'TestAuthor', 'q')
+            app.menu()
+            self.assertIsNotNone(app.blogs['TestCreateBlog'])
+
     def test_menu_calls_print_blogs(self):
         with patch('src.app.print_blogs') as mocked_print_blogs:
             with patch('builtins.input', return_value='q'):
                 app.menu()
                 mocked_print_blogs.assert_called()
+
+    def test_menu_calls_read_blog(self):
+        blog = Blog('Blog Title', 'Test Author')
+        app.blogs = {blog.title: blog}
+
+        with patch('builtins.input') as mocked_input:
+            mocked_input.side_effect = ('r', 'Blog Title', 'q')
+            self.assertEqual(app.blogs['Blog Title'], blog)
+
+    def test_menu_calls_create_post(self):
+        blogTitle = 'Blog Title'
+        blog = Blog(blogTitle, 'Test Author')
+        app.blogs = {blog.title: blog}
+
+        with patch('builtins.input') as mocked_input:
+            mocked_input.side_effect = ('p', blogTitle, 'PostTitle', 'Content', 'q')
+            app.menu()
+            self.assertEqual(blog.posts[0].json(), {'title': 'PostTitle', 'content': 'Content'})
 
     def test_print_blogs(self):
         blog = Blog('Test', 'Test Author')

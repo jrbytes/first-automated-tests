@@ -1,4 +1,5 @@
 from src.blog import Blog
+from typing import Dict
 
 MENU_PROMPT = 'Enter "c" to create a blog, "l" to list blogs, "r" to read one, "p" to create a post, or "q" to quit: '
 POST_TEMPLATE = '''
@@ -7,7 +8,7 @@ POST_TEMPLATE = '''
 {}
 '''
 
-blogs = dict() # blog_name : Blog object
+blogs: Dict[str, Blog] = {}
 
 def menu():
     print_blogs()
